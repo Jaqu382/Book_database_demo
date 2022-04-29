@@ -14,7 +14,7 @@ function security_validate()
     return $status;
 }
 //Sanitize input
-function security_sanitize()
+function security_addSanitize()
 {
     // Create an array of keys username and password
     $result = [
@@ -37,14 +37,48 @@ function security_sanitize()
         $result["reviewed"] = htmlspecialchars($_POST["reviewed"]);
         $result["note"] = htmlspecialchars($_POST["note"]);
     }
+    // Return array
+    return $result;
+}
+function security_searchSanitize()
+{
+    // Create an array of keys username and password
+    $result = [
+        "title" => null,
+        "author" => null,
+    ];
+
+    if (security_validate()) {
+        // After validation, sanitize text input.
+        $result["title"] = htmlspecialchars($_POST["title"]);
+        $result["author"] = htmlspecialchars($_POST["author"]);
+    }
 
     // Return array
     return $result;
 }
+function security_deleteSanitize()
+{
+    // Create an array of keys username and password
+    $result = [
+        "title" => null,
+        "confirm" => null,
+    ];
+
+    if (security_validate()) {
+        // After validation, sanitize text input.
+        $result["title"] = htmlspecialchars($_POST["title"]);
+        $result["confirm"] = htmlspecialchars($_POST["confirm"]);
+    }
+
+    // Return array
+    return $result;
+}
+
 //Create
 function security_addBook()
 {
-    $result = security_sanitize();
+    $result = security_addSanitize();
     database_connect();
     if (!database_verifyBook($result["title"], $result["author"])) {
         database_addBook($result["title"], $result["author"], $result["genre"], $result["owned"], $result["purchase"], $result["reviewed"], $result["note"]);
@@ -54,8 +88,7 @@ function security_addBook()
 //Read
 function security_readRow()
 {
-    $result = security_sanitize();
-    $data = NULL;
+    $result = security_searchSanitize();
     database_connect();
     if (database_verifyBook($result["title"], $result["author"])) {
         $data = database_showRow($result["title"], $result["author"]);
@@ -89,12 +122,10 @@ function security_readTable()
     echo ("</tbody></table>");
     database_close();
 }
-
-
 //update
 function security_update()
 {
-    $result = security_sanitize();
+    $result = security_addSanitize();
     database_connect();
     if (!database_verifyBook($result["title"], $result["author"])) {
         database_updateBook($result["title"], $result["author"], $result["genre"], $result["owned"], $result["purchase"], $result["reviewed"], $result["note"]);
@@ -104,7 +135,7 @@ function security_update()
 //Delete
 function security_deleteBook()
 {
-    $result = security_sanitize();
+    $result = security_deleteSanitize();
     database_connect();
     if (isset($_POST["title"]) and isset($_POST["confirm"])) {
         database_deleteBook($result["title"], $result["confirm"]);

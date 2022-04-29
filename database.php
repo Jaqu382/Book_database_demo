@@ -36,7 +36,7 @@ function database_verifyBook($title, $author)
     global $connection;
     $status = false;
     if ($connection != null) {
-        $results = mysqli_query($connection, "SELECT TITLE FROM books WHERE TITLE = '{$title}' AND AUTHOR = '{$author}");
+        $results = mysqli_query($connection, "SELECT TITLE, AUTHOR FROM books WHERE TITLE = '{$title}' AND AUTHOR = '{$author}");
         $row = mysqli_fetch_assoc($results);
         if ($row != null) $status = true;
     }
@@ -84,7 +84,7 @@ function database_deleteBook($title, $confirm)
     global $connection;
     database_connect();
     if ($connection != null) {
-        if ($confirm == $title)
+        if ($confirm == "Yes")
             mysqli_query($connection, "DELETE FROM books WHERE username = '{$title}';");
     };
     database_close();

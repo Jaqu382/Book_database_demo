@@ -14,6 +14,9 @@ require("security.php")
     <!--End of boilerplate-->
 </head>
 
-<body></body>
+<body>
+    <?php
+    security_readRow() ?>
+</body>
 
 </html>
