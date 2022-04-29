@@ -42,6 +42,18 @@ function database_verifyBook($title, $author)
     }
     return $status;
 }
+function database_showRow($title, $author,)
+{
+    global $connection;
+    if ($connection != null)
+        $results = mysqli_query($connection, "SELECT TITLE, AUTHOR, GENRE, OWNED, PURCHASE, REVIEWED, NOTE FROM my_books WHERE TITLE = '{$title}' AND AUTHOR = '{$author}';");
+    return $results;
+}
+function database_showTable()
+{
+    $results = mysqli_query($connection, "SELECT first_name, last_name, city, `state` FROM sales.customers;");
+    return $results;
+}
 //*Update*/
 function database_updateBook(
     $title,

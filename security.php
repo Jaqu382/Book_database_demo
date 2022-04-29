@@ -51,17 +51,58 @@ function security_addBook()
     }
     database_close();
 }
+//Read
+function security_readRow()
+{
+    $result = security_sanitize();
+    $data = NULL;
+    database_connect();
+    if (database_verifyBook($result["title"], $result["author"])) {
+        $data = database_showRow($result["title"], $result["author"]);
+        echo ("<table><tbody>");
+        $row = mysqli_fetch_assoc($data);
+        echo ("<tr>");
+        echo ("<td>Title:  " . $row["TITLE"] . ", Author: " . $row["AUTHOR"] . "<td>");
+        echo ("</tr>");
+        echo ("</table></tbody>");
+    } else echo ("<p>Data not found</p>");
+    database_close();
+}
+function security_readTable()
+{
+    // Get the results of a query using the connection
+    $results = database_showTable();
+    // Start the HTML table.
+    echo ("<table><tbody>");
+    while ($row = mysqli_fetch_assoc($results)) {
+        // Start the row.
+        echo ("<tr>");
+        //Formats result data as first name, last name, city, state
+        echo ("<td>Title:  " . $row["TITLE"] . ", Author: " . $row["AUTHOR"]);
+        // End the row.
+        echo ("</tr>");
+    }
+
+    // End the HTML table.
+    echo ("</tbody></table>");
+}
+//update
 function security_update()
 {
+    $result = security_sanitize();
+    database_connect();
+    if (!database_verifyBook($result["title"], $result["author"])) {
+        database_updateBook($result["title"], $result["author"], $result["genre"], $result["owned"], $result["purchase"], $result["reviewed"], $result["note"]);
+    }
+    database_close();
 }
-
 //Delete
 function security_deleteBook()
 {
     $result = security_sanitize();
     database_connect();
     if (isset($_POST["title"]) and isset($_POST["confirm"])) {
-        database_deleteUser($result["title"], $result["confirm"]);
+        database_deleteBook($result["title"], $result["confirm"]);
     }
     database_close();
 };
