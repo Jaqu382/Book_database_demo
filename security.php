@@ -59,33 +59,38 @@ function security_readRow()
     database_connect();
     if (database_verifyBook($result["title"], $result["author"])) {
         $data = database_showRow($result["title"], $result["author"]);
-        echo ("<table><tbody>");
+        echo ("<table>");
+        echo ("<th>Title</th><th>Author</th><th>Genre</th>");
         $row = mysqli_fetch_assoc($data);
         echo ("<tr>");
-        echo ("<td>Title:  " . $row["TITLE"] . ", Author: " . $row["AUTHOR"] . "<td>");
+        echo ("<td>" . $row["TITLE"] . "</td>" . "<td>" . $row["AUTHOR"] . "</td>" . "<td>" . $row["GENRE"] . "</td>");
         echo ("</tr>");
-        echo ("</table></tbody>");
+        echo ("</table>");
     } else echo ("<p>Data not found</p>");
     database_close();
 }
 function security_readTable()
 {
     // Get the results of a query using the connection
+    database_connect();
     $results = database_showTable();
     // Start the HTML table.
     echo ("<table><tbody>");
+    echo ("<th>Title</th><th>Author</th><th>Genre</th>");
     while ($row = mysqli_fetch_assoc($results)) {
         // Start the row.
         echo ("<tr>");
         //Formats result data as first name, last name, city, state
-        echo ("<td>Title:  " . $row["TITLE"] . ", Author: " . $row["AUTHOR"]);
+        echo ("<td>" . $row["TITLE"] . "</td>" . "<td>" . $row["AUTHOR"] . "</td>" . "<td>" . $row["GENRE"] . "</td>");
         // End the row.
         echo ("</tr>");
     }
-
     // End the HTML table.
     echo ("</tbody></table>");
+    database_close();
 }
+
+
 //update
 function security_update()
 {
